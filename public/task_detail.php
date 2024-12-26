@@ -79,4 +79,22 @@ ob_start();
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
+            </div>
+    </div>
+
+    <div class="description">
+        <h3>Description</h3>
+        <p><?php echo nl2br(htmlspecialchars($task['description'])); ?></p>
+    </div>
+
+    <div class="actions">
+        <a href="/tasks.php" class="btn">Back to Tasks</a>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <a href="/task_edit.php?id=<?php echo $task['id']; ?>" class="btn btn-success">Edit Task</a>
+        <?php endif; ?>
+    </div>
 </div>
+
+<?php
+$content = ob_get_clean();
+require_once __DIR__ . '/../views/layout.php';
