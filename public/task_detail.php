@@ -63,4 +63,20 @@ ob_start();
                     </form>
                 <?php endif; ?>
             </div>
+
+            <div class="meta-info">
+                <p><strong>Type:</strong> <span class="status-badge"><?php echo $task['type']; ?></span></p>
+                <p><strong>Assigned to:</strong> <?php echo $task['username'] ?? 'Unassigned'; ?></p>
+                <p><strong>Created:</strong> <?php echo (new DateTime($task['created_at']))->format('Y-m-d H:i'); ?></p>
+                <p><strong>Last updated:</strong> <?php echo (new DateTime($task['updated_at']))->format('Y-m-d H:i'); ?></p>
+
+                <?php if ($task['type'] === 'BUG'): ?>
+                    <p><strong>Severity:</strong> <span class="status-badge"><?php echo $task['severity']; ?></span></p>
+                <?php else: ?>
+                    <p><strong>Priority:</strong> <span class="status-badge"><?php echo $task['priority']; ?></span></p>
+                    <?php if ($task['deadline']): ?>
+                        <p><strong>Deadline:</strong> <?php echo (new DateTime($task['deadline']))->format('Y-m-d H:i'); ?></p>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
 </div>
