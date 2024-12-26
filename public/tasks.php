@@ -86,6 +86,41 @@ ob_start();
             <button type="submit" class="btn">Apply Filters</button>
         </form>
     </div>
+    <div class="task-list">
+        <?php foreach ($tasks as $task): ?>
+            <div class="task-card">
+                <h3><?php echo htmlspecialchars($task['title']); ?></h3>
+                <p><?php echo htmlspecialchars(substr($task['description'], 0, 100)) . '...'; ?></p>
+                
+                <div class="task-meta">
+                    <p>Status: <span class="status-badge status-<?php echo strtolower($task['status']); ?>"><?php echo $task['status']; ?></span></p>
+                    <p>Type: <span class="status-badge"><?php echo $task['type']; ?></span></p>
+                    <p>Assigned to: <?php echo $task['username'] ?? 'Unassigned'; ?></p>
+                    
+                    <?php if ($task['type'] === 'BUG'): ?>
+                        <p>Severity: <span class="status-badge"><?php echo $task['severity']; ?></span></p>
+                    <?php else: ?>
+                        <p>Priority: <span class="status-badge"><?php echo $task['priority']; ?></span></p>
+                        <?php if ($task['deadline']): ?>
+                            <p>Deadline: <?php echo (new DateTime($task['deadline']))->format('Y-m-d H:i'); ?></p>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+
+                <div class="task-actions">
+                    <a href="/task_detail.php?id=<?php echo $task['id']; ?>" class="btn">View Details</a>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <a href="/task_edit.php?id=<?php echo $task['id']; ?>" class="btn btn-success">Edit</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <?php if (empty($tasks)): ?>
+            <p>No tasks found matching your criteria.</p>
+        <?php endif; ?>
+    </div>
+
 </div>
 
 
