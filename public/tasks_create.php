@@ -61,3 +61,25 @@
 
     <button type="submit" class="btn">Create Task</button>
 </form>
+
+<script>
+document.getElementById('type').addEventListener('change', function() {
+    const bugFields = document.querySelector('.bug-fields');
+    const featureFields = document.querySelector('.feature-fields');
+    
+    if (this.value === 'BUG') {
+        bugFields.style.display = 'block';
+        featureFields.style.display = 'none';
+    } else {
+        bugFields.style.display = 'none';
+        featureFields.style.display = 'block';
+    }
+});
+
+// Show initial fields based on default selection
+document.getElementById('type').dispatchEvent(new Event('change'));
+</script>
+
+<?php
+$content = ob_get_clean();
+require_once __DIR__ . '/../views/layout.php';
