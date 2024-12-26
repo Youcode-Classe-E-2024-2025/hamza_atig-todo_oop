@@ -86,6 +86,7 @@ ob_start();
             <button type="submit" class="btn">Apply Filters</button>
         </form>
     </div>
+
     <div class="task-list">
         <?php foreach ($tasks as $task): ?>
             <div class="task-card">
@@ -120,7 +121,8 @@ ob_start();
             <p>No tasks found matching your criteria.</p>
         <?php endif; ?>
     </div>
-
 </div>
 
-
+<?php
+$content = ob_get_clean();
+require_once __DIR__ . '/../views/layout.php';
