@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../src/config/database.php';
+require_once __DIR__ . '/../src/config/db.php';
 require_once __DIR__ . '/../src/classes/User.php';
 
 $pageTitle = 'Login';
@@ -55,5 +55,3 @@ ob_start();
 </div>
 
 <?php
-$content = ob_get_clean();
-require_once __DIR__ . '/../views/layout.php';
