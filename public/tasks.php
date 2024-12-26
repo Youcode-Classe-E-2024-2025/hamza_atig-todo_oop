@@ -1,3 +1,52 @@
+<?php
+session_start();
+require_once __DIR__ . '/../src/config/database.php';
+
+$pageTitle = 'Tasks';
+$db = Database::getInstance();
+
+// Get filter parameters
+$status = $_GET['status'] ?? '';
+$type = $_GET['type'] ?? '';
+$assignedTo = $_GET['assigned_to'] ?? '';
+
+// Build query
+$query = "
+    SELECT t.*, u.username 
+    FROM tasks t 
+    LEFT JOIN users u ON t.assigned_to = u.id 
+    WHERE 1=1
+";
+$params = [];
+
+if ($status) {
+    $query .= " AND t.status = ?";
+    $params[] = $status;
+}
+
+if ($type) {
+    $query .= " AND t.type = ?";
+    $params[] = $type;
+}
+
+if ($assignedTo) {
+    $query .= " AND t.assigned_to = ?";
+    $params[] = $assignedTo;
+}
+
+$query .= " ORDER BY t.created_at DESC";
+
+// Execute query
+$stmt = $db->prepare($query);
+$stmt->execute($params);
+$tasks = $stmt->fetchAll();
+
+// Get users for filter
+$users = $db->query("SELECT id, username FROM users")->fetchAll();
+
+ob_start();
+?>
+
 <div class="tasks-page">
     <h2>Tasks</h2>
 
