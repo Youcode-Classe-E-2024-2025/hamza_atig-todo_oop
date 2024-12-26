@@ -1,3 +1,64 @@
+<?php
+session_start();
+require_once __DIR__ . '/../src/config/database.php';
+require_once __DIR__ . '/../src/classes/Bug.php';
+require_once __DIR__ . '/../src/classes/Feature.php';
+
+$pageTitle = 'Create Task';
+$db = Database::getInstance();
+
+// Get all users for assignment
+$users = $db->query("SELECT id, username FROM users")->fetchAll();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        $type = $_POST['type'];
+        $title = $_POST['title'];
+        $description = $_POST['description'];
+        $assignedTo = !empty($_POST['assigned_to']) ? (int)$_POST['assigned_to'] : null;
+
+        // Create the appropriate task type
+        if ($type === 'BUG') {
+            $severity = $_POST['severity'];
+            $task = new Bug($title, $description, $severity, $assignedTo);
+        } else {
+            $priority = $_POST['priority'];
+            $deadline = !empty($_POST['deadline']) ? new DateTime($_POST['deadline']) : null;
+            $task = new Feature($title, $description, $priority, $deadline, $assignedTo);
+        }
+
+        // Insert into database
+        $stmt = $db->prepare("
+            INSERT INTO tasks (title, description, type, status, assigned_to, created_at, updated_at, severity, priority, deadline)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+
+        $stmt->execute([
+            $task->getTitle(),
+            $task->getDescription(),
+            $task->getType(),
+            $task->getStatus(),
+            $task->getAssignedTo(),
+            $task->getCreatedAt()->format('Y-m-d H:i:s'),
+            $task->getUpdatedAt()->format('Y-m-d H:i:s'),
+            $type === 'BUG' ? $task->getSeverity() : null,
+            $type === 'FEATURE' ? $task->getPriority() : null,
+            $type === 'FEATURE' && $task->getDeadline() ? $task->getDeadline()->format('Y-m-d H:i:s') : null
+        ]);
+
+        $_SESSION['flash_message'] = 'Task created successfully!';
+        $_SESSION['flash_type'] = 'success';
+        header('Location: /tasks.php');
+        exit;
+    } catch (Exception $e) {
+        $_SESSION['flash_message'] = 'Error creating task: ' . $e->getMessage();
+        $_SESSION['flash_type'] = 'error';
+    }
+}
+
+ob_start();
+?>
+
 <h2>Create New Task</h2>
 
 <form method="POST" class="task-form">
