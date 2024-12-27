@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../src/config/database.php';
+require_once __DIR__ . '/../src/config/db.php';
 require_once __DIR__ . '/../src/classes/Bug.php';
 require_once __DIR__ . '/../src/classes/Feature.php';
 

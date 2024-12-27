@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../src/config/database.php';
+require_once __DIR__ . '/../src/config/db.php';
 
 $pageTitle = 'Tasks';
 $db = Database::getInstance();
