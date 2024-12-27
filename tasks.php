@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/../src/config/db.php';
+require_once __DIR__ . '/./src/config/db.php';
 
 $pageTitle = 'Tasks';
 $db = Database::getInstance();
@@ -125,4 +125,4 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-require_once __DIR__ . '/../views/layout.php';
+require_once __DIR__ . '/./views/layout.php';
