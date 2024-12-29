@@ -60,6 +60,32 @@ nav {
     gap: 1rem;
 }
 
+/* Navigation Bar Styles */
+.nav {
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+
+.nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.nav ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+.nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.nav ul li a:hover {
+    text-decoration: underline;
+}
+
 /* Button Styles */
 .btn {
     display: inline-flex;
