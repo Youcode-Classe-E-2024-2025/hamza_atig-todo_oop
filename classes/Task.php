@@ -16,6 +16,7 @@ class Task {
         $this->conn = $database->connect();
     }
 
+    // Read all tasks
     public function read() {
         $query = 'SELECT * FROM ' . $this->table . ' ORDER BY created_at DESC';
         $stmt = $this->conn->prepare($query);
@@ -23,6 +24,7 @@ class Task {
         return $stmt;
     }
 
+    // Read single task
     public function read_single() {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
         $stmt = $this->conn->prepare($query);
@@ -30,7 +32,7 @@ class Task {
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($row) {
+        if ($row) {
             $this->name = $row['name'];
             $this->description = $row['description'];
             $this->due_date = $row['due_date'];
@@ -41,6 +43,7 @@ class Task {
         return false;
     }
 
+    // Create task
     public function create() {
         $query = 'INSERT INTO ' . $this->table . ' 
             (name, description, due_date, status) 
@@ -60,16 +63,20 @@ class Task {
         $stmt->bindParam(':due_date', $this->due_date);
         $stmt->bindParam(':status', $this->status);
 
-        if($stmt->execute()) {
-            return true;
+        try {
+            if ($stmt->execute()) {
+                return true;
+            }
+            return false;
+        } catch (PDOException $e) {
+            error_log("Create error: " . $e->getMessage());
+            return false;
         }
-        
-        printf("Error: %s.\n", $stmt->error);
-        return false;
     }
 
+    // Update task
     public function update() {
-        $query = 'UPDATE ' . $this->table . '
+        $query = 'UPDATE ' . $this->table . ' 
             SET name = :name, 
                 description = :description, 
                 due_date = :due_date, 
@@ -93,16 +100,17 @@ class Task {
         $stmt->bindParam(':id', $this->id);
 
         try {
-            if($stmt->execute()) {
+            if ($stmt->execute()) {
                 return true;
             }
             return false;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Update error: " . $e->getMessage());
-            throw $e;
+            return false;
         }
     }
 
+    // Delete task
     public function delete() {
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
         $stmt = $this->conn->prepare($query);
@@ -114,13 +122,14 @@ class Task {
         $stmt->bindParam(':id', $this->id);
 
         try {
-            if($stmt->execute()) {
+            if ($stmt->execute()) {
                 return true;
             }
             return false;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Delete error: " . $e->getMessage());
-            throw $e;
+            return false;
         }
     }
 }
+?>
