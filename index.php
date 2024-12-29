@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,8 +26,6 @@
 </head>
 
 <body>
-  <!-- Because body has height 100%, we need a container to wrap the individual 
-    elements. The purpose is to add top & bottom padding -->
   <div class="content-container">
     <!-- success notification -->
     <div id="notification" class="notification green-background">
