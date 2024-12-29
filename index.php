@@ -40,7 +40,7 @@ if (!isset($_SESSION['username'])) {
           <button id="add-task-cta" class="button regular-button blue-background">
             Add
           </button>
-          <button class="sign-out-cta">Sign out</button>
+          <a href="logout.php" class="sign-out-cta">Sign out</a>
         </div>
       </div>
     </div>
